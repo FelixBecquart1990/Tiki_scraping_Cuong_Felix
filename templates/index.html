@@ -23,7 +23,12 @@
         <a class="nav-link active" href="/">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/test">Test</a>
+        <a class="nav-link" href="/crawl-all-subcategories"
+          >Crawl all subcategories</a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/crawl-all-products">Crawl all products</a>
       </li>
     </ul>
 
@@ -31,7 +36,7 @@
       <div class="row">
         <div class="col-sm-4">
           <div class="list-group" style="width:200px; margin-top:50px">
-            {% for category in categories %}
+            {% for category in mainCategories %}
             <a href="{{ url_for('get_category', categoryId=category[0]) }}">
               <button
                 type="button"
@@ -41,25 +46,34 @@
               </button>
             </a>
             {% endfor%}
-            <a href="/show-more-categories">
+            <a href="/show-more-main-categories">
               <button
                 type="button"
                 class="list-group-item list-group-item-action btn-primary"
               >
                 <span style="color:#007bff"
-                  >Show more... ({{ categories|length
-                  }}/{{numberOfCategories[0][0]}})</span
+                  >Show more... ({{ mainCategories|length
+                  }}/{{numberOfMainCategories[0][0]}})</span
                 >
               </button>
             </a>
           </div>
         </div>
         <div class="col-sm-8" style="margin-top:50px">
-          {{category[0]}}<br />
-          {{category[1]}}<br />
-          {{category[2]}}<br />
-          {{category[3]}}<br />
-          {{category[4]}}<br />
+          <div class="card-columns">
+            <!-- Loop through the data and display it -->
+            {% for subcategory in subcategories %}
+            <div class="card">
+              <div class="card-body">
+                {{subcategory[0]}}<br />
+                {{subcategory[1]}}<br />
+                {{subcategory[2]}}<br />
+                {{subcategory[3]}}<br />
+                {{subcategory[4]}}<br />
+              </div>
+            </div>
+            {% endfor%}
+          </div>
         </div>
       </div>
     </div>
