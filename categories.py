@@ -10,7 +10,7 @@ conn.autocommit = True
 cursor = conn.cursor()
 
 
-def create_category_table():
+def create_categories_table():
     query = """
         CREATE TABLE IF NOT EXISTS categories(
             id SERIAL PRIMARY KEY,
@@ -26,6 +26,21 @@ def create_category_table():
     except Exception as err:
         print(f'ERROR: {err}')
 
+def create_products_table():
+    query = """
+        CREATE TABLE IF NOT EXISTS products(
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(255),
+            url TEXT,
+            parent_id INT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+    """
+    try:
+        cursor.execute(query)
+        crawl_main_categories(True)
+    except Exception as err:
+        print(f'ERROR: {err}')
 
 def crawl_main_categories(save_db=False):
     s = parse(TIKI_URL)
