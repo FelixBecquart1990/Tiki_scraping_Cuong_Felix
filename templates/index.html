@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Title</title>
+    <title>Tiki</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
@@ -18,6 +18,52 @@
     />
   </head>
   <body>
+    <ul class="nav justify-content-center">
+      <li class="nav-item">
+        <a class="nav-link active" href="/">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/test">Test</a>
+      </li>
+    </ul>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="list-group" style="width:200px; margin-top:50px">
+            {% for category in categories %}
+            <a href="{{ url_for('get_category', categoryId=category[0]) }}">
+              <button
+                type="button"
+                class="list-group-item list-group-item-action text-truncate"
+              >
+                {{ category[1] }}
+              </button>
+            </a>
+            {% endfor%}
+            <a href="/show-more-categories">
+              <button
+                type="button"
+                class="list-group-item list-group-item-action btn-primary"
+              >
+                <span style="color:#007bff"
+                  >Show more... ({{ categories|length
+                  }}/{{numberOfCategories[0][0]}})</span
+                >
+              </button>
+            </a>
+          </div>
+        </div>
+        <div class="col-sm-8" style="margin-top:50px">
+          {{category[0]}}<br />
+          {{category[1]}}<br />
+          {{category[2]}}<br />
+          {{category[3]}}<br />
+          {{category[4]}}<br />
+        </div>
+      </div>
+    </div>
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script
