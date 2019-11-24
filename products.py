@@ -18,7 +18,9 @@ def create_products_table():
             title VARCHAR(255),
             image TEXT,
             category_id INT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            product_url TEXT,
+            final_price VARCHAR(255)
             );
     """
     try:
@@ -51,10 +53,12 @@ def create_products_table():
 
 
 class Product:
-    def __init__(self, title, image, category_id):
+    def __init__(self, title, image, category_id, product_url, final_price):
         self.title = title
         self.image = image
         self.category_id = category_id
+        self.product_url = product_url
+        self.final_price = final_price
 
     def save_into_db(self):
 
@@ -69,10 +73,11 @@ class Product:
         #     print(f'ERROR: {err}')
 
         query = f"""
-            INSERT INTO products (title, image, category_id)
-            VALUES (%s, %s, %s) RETURNING id;
+            INSERT INTO products (title, image, category_id, product_url, final_price)
+            VALUES (%s, %s, %s, %s, %s) RETURNING id;
         """
-        val = (self.title, self.image, self.category_id)
+        val = (self.title, self.image, self.category_id,
+               self.product_url, self.final_price)
         # print(
         #     f'title: {self.title}')
         try:
@@ -110,8 +115,12 @@ def crawl_products(url, category_id, save_db=False):
             title = div.get('data-title')
             image = div.img['src']
             # print(int(category_id))
-            category_id = category_id
-            product = Product(title, image, category_id)
+            category_id = category_id,
+            product_url = div.a['href']
+            final_price = div.find(
+                'span', class_='final-price').text.strip().split()[0]
+            product = Product(title, image, category_id,
+                              product_url, final_price)
             if save_db:
                 product.save_into_db()
     except Exception as err:
@@ -132,7 +141,7 @@ def crawl_all_products_of_all_categories():
         else:
             url = a+"&page="
         i = 1
-        while crawl_products(url+str(i), category_id, True) != "no more products":
+        while crawl_products(url+str(i), category_id, True) != "no more products" and i < 2:
             print("page " + str(i))
             i += 1
 

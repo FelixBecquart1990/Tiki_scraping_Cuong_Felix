@@ -94,21 +94,25 @@
         <div class="card-columns" style="padding-right:40px;padding-left:10px">
           <!-- Loop through the data and display it -->
           {% for product in products %}
-          <div
-            class="card"
-            style="background-color: transparent; border: solid 0px transparent;width:50%;margin-left:60px"
-          >
-            <img
-              src="{{ product[2] }}"
-              class="card-img-top"
-              alt="..."
-              style="border-radius:20px"
-            />
-            <div class="card-body">
-              <h5 class="card-title" style="color:white">{{ product[1] }}</h5>
-              <!-- <p>{{product}}</p> -->
+          <a href="{{ product[5] }}" target="_blank">
+            <div
+              class="card product"
+              style="background-color: transparent; border: solid 0px transparent;width:50%;margin-left:60px"
+            >
+              <img
+                src="{{ product[2] }}"
+                class="card-img-top"
+                alt="..."
+                style="border-radius:20px"
+              />
+              <div class="card-body">
+                <h5 class="card-title" style="color:white">{{ product[1] }}</h5>
+                <h4 style="color:white; text-decoration:underline">
+                  Price: {{product[6]}}
+                </h4>
+              </div>
             </div>
-          </div>
+          </a>
           {% endfor%}
         </div>
         <a href="/show-more-products" style="margin-left:70px">
@@ -298,5 +302,9 @@
   }
   ::-webkit-scrollbar {
     display: none;
+  }
+  .product:hover {
+    transition: all 0.3s;
+    transform: scale(0.95);
   }
 </style>
