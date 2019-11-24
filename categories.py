@@ -26,21 +26,6 @@ def create_categories_table():
     except Exception as err:
         print(f'ERROR: {err}')
 
-def create_products_table():
-    query = """
-        CREATE TABLE IF NOT EXISTS products(
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(255),
-            url TEXT,
-            parent_id INT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-    """
-    try:
-        cursor.execute(query)
-        crawl_main_categories(True)
-    except Exception as err:
-        print(f'ERROR: {err}')
 
 def crawl_main_categories(save_db=False):
     s = parse(TIKI_URL)
@@ -187,7 +172,10 @@ def get_number_of_main_categories():
     cursor.execute("SELECT COUNT(*) FROM categories WHERE parent_id IS NULL")
     numberOfMainCategories = cursor.fetchall()
     return numberOfMainCategories
-
+def get_number_of_subcategories():
+    cursor.execute("SELECT COUNT(*) FROM categories WHERE parent_id IS NOT NULL")
+    numberOfSubcategories = cursor.fetchall()
+    return numberOfSubcategories
 
 # import the data from the JSON file
 # insert_query = "INSERT INTO student VALUES {}".format("(4, 'felix', 'hello@dataquest.io')")

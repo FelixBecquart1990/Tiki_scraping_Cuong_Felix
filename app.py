@@ -11,9 +11,12 @@ def index():
     products.create_products_table()
     category = categories.get_category()
     mainCategories = categories.get_main_categories(0)
-    numberOfMainCategories = categories.get_number_of_main_categories()
     subcategories = categories.get_subcategories()
-    return render_template('index.html', subcategories=subcategories, mainCategories=mainCategories, numberOfMainCategories=numberOfMainCategories, category=category)
+    productsToShow = products.get_products()
+    numberOfMainCategories = categories.get_number_of_main_categories()
+    numberOfSubcategories = categories.get_number_of_subcategories()
+    numberOfProducts = products.get_number_of_products()
+    return render_template('index.html', numberOfProducts=numberOfProducts, products=productsToShow, subcategories=subcategories, mainCategories=mainCategories, numberOfMainCategories=numberOfMainCategories, numberOfSubcategories=numberOfSubcategories, category=category)
     # return render_template('index.html', categories=categories, numberOfCategories=numberOfCategories)
     # return render_template('index.html')
 
@@ -36,12 +39,27 @@ def crawl_all_categories():
     return redirect(url_for('.index'))
 
 
-@app.route("/get-category/<categoryId>", methods=['GET', 'POST'])
-def get_category(categoryId):
+@app.route("/get-subcategories/<categoryId>", methods=['GET', 'POST'])
+def get_subcategories(categoryId):
     categories.iDselectedCategory = categoryId
     return redirect(url_for('.index'))
 
 
+@app.route("/get-products/<categoryId>", methods=['GET', 'POST'])
+def get_products(categoryId):
+    categories.iDselectedproducts = categoryId
+    return redirect(url_for('.index'))
+
+
+# @app.route('/test-crawl-products')
+# def test_crawl_products():
+#     products.crawl_products(True)
+#     return redirect(url_for('.index'))
+
+@app.route('/crawl-all-products-of-a-category')
+def crawl_all_products_of_a_category():
+    products.crawl_all_products_of_a_category(True)
+    return redirect(url_for('.index'))
 # @app.route('/test')
 # def test():
 #     categories = categories.get_categories(0)

@@ -17,7 +17,7 @@
       crossorigin="anonymous"
     />
   </head>
-  <body>
+  <body style="background-color: #F4F4F4">
     <ul class="nav justify-content-center">
       <li class="nav-item">
         <a class="nav-link active" href="/">Home</a>
@@ -28,52 +28,65 @@
         >
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/crawl-all-products">Crawl all products</a>
+        <a class="nav-link" href="/crawl-all-products-of-a-category"
+          >Crawl all products of a category</a
+        >
       </li>
     </ul>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-4">
-          <div class="list-group" style="width:200px; margin-top:50px">
-            {% for category in mainCategories %}
-            <a href="{{ url_for('get_category', categoryId=category[0]) }}">
-              <button
-                type="button"
-                class="list-group-item list-group-item-action text-truncate"
+    <div>number of products: {{numberOfProducts[0][0]}}</div>
+    <div>number of main categories: {{numberOfMainCategories[0][0]}}</div>
+    <div>number of subcategories: {{numberOfSubcategories[0][0]}}</div>
+
+    <div class="row">
+      <div class="col-sm-2">
+        <div class="list-group" style="margin-top:50px">
+          {% for category in mainCategories %}
+          <a href="{{ url_for('get_subcategories', categoryId=category[0]) }}">
+            <button
+              type="button"
+              class="list-group-item list-group-item-action text-truncate"
+            >
+              {{ category[1] }}
+            </button>
+          </a>
+          {% endfor%}
+          <a href="/show-more-main-categories">
+            <button
+              type="button"
+              class="list-group-item list-group-item-action btn-primary"
+            >
+              <span style="color:#007bff"
+                >Show more... ({{ mainCategories|length
+                }}/{{numberOfMainCategories[0][0]}})</span
               >
-                {{ category[1] }}
-              </button>
-            </a>
-            {% endfor%}
-            <a href="/show-more-main-categories">
-              <button
-                type="button"
-                class="list-group-item list-group-item-action btn-primary"
-              >
-                <span style="color:#007bff"
-                  >Show more... ({{ mainCategories|length
-                  }}/{{numberOfMainCategories[0][0]}})</span
-                >
-              </button>
-            </a>
-          </div>
+            </button>
+          </a>
         </div>
-        <div class="col-sm-8" style="margin-top:50px">
-          <div class="card-columns">
-            <!-- Loop through the data and display it -->
-            {% for subcategory in subcategories %}
-            <div class="card">
-              <div class="card-body">
-                {{subcategory[0]}}<br />
-                {{subcategory[1]}}<br />
-                {{subcategory[2]}}<br />
-                {{subcategory[3]}}<br />
-                {{subcategory[4]}}<br />
-              </div>
+      </div>
+      <div class="col-sm-10" style="margin-top:50px">
+        <ul class="nav nav-tabs">
+          {% for subcategory in subcategories %}
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              href="{{ url_for('get_products', categoryId=subcategory[0]) }}"
+              >{{subcategory[1]}}</a
+            >
+          </li>
+          {% endfor%}
+        </ul>
+        <div class="card-columns">
+          <!-- Loop through the data and display it -->
+          {% for product in products %}
+          <div class="card">
+            <img src="{{ product[2] }}" class="card-img-top" alt="..." />
+            <div class="card-body">
+              <h5 class="card-title">{{ product[1] }}</h5>
+              <p>Price</p>
             </div>
-            {% endfor%}
           </div>
+          {% endfor%}
         </div>
       </div>
     </div>
