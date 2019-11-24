@@ -132,7 +132,7 @@ def crawl_all_products_of_all_categories():
         else:
             url = a+"&page="
         i = 1
-        while crawl_products(url+str(i), category_id, True) != "no more products" and i < 2:
+        while crawl_products(url+str(i), category_id, True) != "no more products":
             print("page " + str(i))
             i += 1
 
