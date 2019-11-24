@@ -28,8 +28,8 @@
         >
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/crawl-all-products-of-a-category"
-          >Crawl all products of a category</a
+        <a class="nav-link" href="/crawl-all-products-of-all-categories"
+          >Crawl all products of all categories</a
         >
       </li>
     </ul>
@@ -83,11 +83,22 @@
             <img src="{{ product[2] }}" class="card-img-top" alt="..." />
             <div class="card-body">
               <h5 class="card-title">{{ product[1] }}</h5>
-              <p>Price</p>
+              <!-- <p>{{product}}</p> -->
             </div>
           </div>
           {% endfor%}
         </div>
+        <a href="/show-more-products">
+          <button
+            type="button"
+            class="list-group-item list-group-item-action btn-primary"
+          >
+            <span style="color:#007bff"
+              >Show more... ({{ products|length
+              }}/{{numberOfProductsOfCategory[0][0]}})</span
+            >
+          </button>
+        </a>
       </div>
     </div>
 

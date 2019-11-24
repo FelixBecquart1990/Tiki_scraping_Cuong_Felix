@@ -16,7 +16,8 @@ def index():
     numberOfMainCategories = categories.get_number_of_main_categories()
     numberOfSubcategories = categories.get_number_of_subcategories()
     numberOfProducts = products.get_number_of_products()
-    return render_template('index.html', numberOfProducts=numberOfProducts, products=productsToShow, subcategories=subcategories, mainCategories=mainCategories, numberOfMainCategories=numberOfMainCategories, numberOfSubcategories=numberOfSubcategories, category=category)
+    numberOfProductsOfCategory = products.get_number_of_products_of_category()
+    return render_template('index.html', numberOfProductsOfCategory=numberOfProductsOfCategory, numberOfProducts=numberOfProducts, products=productsToShow, subcategories=subcategories, mainCategories=mainCategories, numberOfMainCategories=numberOfMainCategories, numberOfSubcategories=numberOfSubcategories, category=category)
     # return render_template('index.html', categories=categories, numberOfCategories=numberOfCategories)
     # return render_template('index.html')
 
@@ -41,6 +42,7 @@ def crawl_all_categories():
 
 @app.route("/get-subcategories/<categoryId>", methods=['GET', 'POST'])
 def get_subcategories(categoryId):
+    products.numberOfProductsToShow = 3
     categories.iDselectedCategory = categoryId
     return redirect(url_for('.index'))
 
@@ -51,14 +53,20 @@ def get_products(categoryId):
     return redirect(url_for('.index'))
 
 
+@app.route('/show-more-products')
+def show_more_products():
+    products.numberOfProductsToShow += 3
+    return redirect(url_for('.index'))
+
 # @app.route('/test-crawl-products')
 # def test_crawl_products():
 #     products.crawl_products(True)
 #     return redirect(url_for('.index'))
 
-@app.route('/crawl-all-products-of-a-category')
-def crawl_all_products_of_a_category():
-    products.crawl_all_products_of_a_category(True)
+
+@app.route('/crawl-all-products-of-all-categories')
+def crawl_all_products_of_all_categories():
+    products.crawl_all_products_of_all_categories()
     return redirect(url_for('.index'))
 # @app.route('/test')
 # def test():

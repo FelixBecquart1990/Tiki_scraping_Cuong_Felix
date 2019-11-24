@@ -138,7 +138,15 @@ def crawl_all_subcategories(main_categories):
 
 
 numberOfMainCategoriesShown = 10
-iDselectedCategory = 32
+iDselectedCategory = 1
+
+
+def get_category():
+    global iDselectedCategory
+    cursor.execute("SELECT * FROM categories WHERE id=" +
+                   str(iDselectedCategory))
+    category = cursor.fetchall()
+    return category[0]
 
 
 def get_main_categories(numberOfMainCategoriesToAdd):
@@ -151,14 +159,6 @@ def get_main_categories(numberOfMainCategoriesToAdd):
     return mainCategories
 
 
-def get_category():
-    global iDselectedCategory
-    cursor.execute("SELECT * FROM categories WHERE id=" +
-                   str(iDselectedCategory))
-    category = cursor.fetchall()
-    return category[0]
-
-
 def get_subcategories():
     global iDselectedCategory
     cursor.execute("SELECT * FROM categories WHERE parent_id=" +
@@ -168,12 +168,21 @@ def get_subcategories():
     return subcategories
 
 
+def get_all_categories():
+    cursor.execute("SELECT * FROM categories")
+    categories = cursor.fetchall()
+    return categories
+
+
 def get_number_of_main_categories():
     cursor.execute("SELECT COUNT(*) FROM categories WHERE parent_id IS NULL")
     numberOfMainCategories = cursor.fetchall()
     return numberOfMainCategories
+
+
 def get_number_of_subcategories():
-    cursor.execute("SELECT COUNT(*) FROM categories WHERE parent_id IS NOT NULL")
+    cursor.execute(
+        "SELECT COUNT(*) FROM categories WHERE parent_id IS NOT NULL")
     numberOfSubcategories = cursor.fetchall()
     return numberOfSubcategories
 

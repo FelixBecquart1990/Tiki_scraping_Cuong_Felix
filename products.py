@@ -2,6 +2,7 @@ import psycopg2
 from bs4 import BeautifulSoup
 import requests
 from collections import deque
+import categories
 
 TIKI_URL = 'https://tiki.vn/'
 
@@ -16,6 +17,7 @@ def create_products_table():
             id SERIAL PRIMARY KEY,
             title VARCHAR(255),
             image TEXT,
+            category_id INT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
     """
@@ -49,9 +51,10 @@ def create_products_table():
 
 
 class Product:
-    def __init__(self, title, image):
+    def __init__(self, title, image, category_id):
         self.title = title
         self.image = image
+        self.category_id = category_id
 
     def save_into_db(self):
 
@@ -66,12 +69,12 @@ class Product:
         #     print(f'ERROR: {err}')
 
         query = f"""
-            INSERT INTO products (title, image) 
-            VALUES (%s, %s) RETURNING id;
+            INSERT INTO products (title, image, category_id)
+            VALUES (%s, %s, %s) RETURNING id;
         """
-        val = (self.title, self.image)
-        print(
-            f'title: {self.title}')
+        val = (self.title, self.image, self.category_id)
+        # print(
+        #     f'title: {self.title}')
         try:
             cursor.execute(query, val)
             # Get id of the new row
@@ -80,7 +83,7 @@ class Product:
             print(f'ERROR: {err}')
 
     def __repr__(self):
-        return f'ID: {self.product_id}, Name: {self.title}'
+        return f'ID: {self.product_id}, Name: {self.title}, Category_id: {self.category_id}'
 
 
 def parse(url):
@@ -93,34 +96,46 @@ def parse(url):
         return ''
 
 
-def crawl_products(url, save_db=False):
+def crawl_products(url, category_id, save_db=False):
     # title = product.title
     # image = product.image
-    url = url
 
     try:
         div_containers = parse(url).find_all(
             'div', attrs={"class": "product-item"})
-        print(div_containers)
+        # print(div_containers)
         if div_containers == []:
             return "no more products"
         for div in div_containers:
             title = div.get('data-title')
             image = div.img['src']
-            product = Product(title, image)
+            # print(int(category_id))
+            category_id = category_id
+            product = Product(title, image, category_id)
             if save_db:
                 product.save_into_db()
     except Exception as err:
         print(f'ERROR: {err}')
 
-    return print("end of page crawling")
+    return print("end of page crawling. Category_id:" + str(category_id))
 
 
-def crawl_all_products_of_a_category(save_db=False):
-    url = 'https://tiki.vn/dien-thoai-may-tinh-bang/c1789?src=c.1789.hamburger_menu_fly_out_banner&page='
-    i = 1
-    while crawl_products(url+str(i), True) != "no more products":
-        i += 1
+def crawl_all_products_of_all_categories():
+    allCategories = categories.get_all_categories()
+    print(len(categories.get_all_categories()))
+    print(type(categories.get_all_categories()))
+    for category in allCategories:
+        url = category[2]
+        category_id = category[0]
+        if url.find("page="):
+            url = url[:url.find("&page=")]+"&page="
+        else:
+            url = a+"&page="
+        i = 1
+        while crawl_products(url+str(i), category_id, True) != "no more products" and i < 2:
+            print("page " + str(i))
+            i += 1
+
 
 # def crawl_all_subcategories(main_categories):
 #     queue = deque(main_categories)
@@ -157,10 +172,12 @@ def crawl_all_products_of_a_category(save_db=False):
 #                    str(iDselectedCategory))
 #     category = cursor.fetchall()
 #     return category[0]
+numberOfProductsToShow = 3
 
 
 def get_products():
-    cursor.execute("SELECT * FROM products")
+    cursor.execute("SELECT * FROM products WHERE category_id =" +
+                   str(categories.iDselectedCategory) + " LIMIT " + str(numberOfProductsToShow))
     # cursor.execute("SELECT * FROM categories LIMIT 15 OFFSET 200")
     products = cursor.fetchall()
     return products
@@ -171,6 +188,12 @@ def get_number_of_products():
     products = cursor.fetchall()
     return products
 
+
+def get_number_of_products_of_category():
+    cursor.execute("SELECT COUNT(*) FROM products WHERE category_id=" +
+                   str(categories.iDselectedCategory))
+    products = cursor.fetchall()
+    return products
 
 # import the data from the JSON file
 # insert_query = "INSERT INTO student VALUES {}".format("(4, 'felix', 'hello@dataquest.io')")
