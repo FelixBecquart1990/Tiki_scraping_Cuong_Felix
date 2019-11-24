@@ -137,7 +137,7 @@ def crawl_all_subcategories(main_categories):
                 print(f'{count} number of deepest nodes')
 
 
-numberOfMainCategoriesShown = 10
+numberOfMainCategoriesShown = 25
 iDselectedCategory = 1
 
 

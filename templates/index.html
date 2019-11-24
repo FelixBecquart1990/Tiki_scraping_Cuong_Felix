@@ -18,7 +18,9 @@
     />
   </head>
   <body>
-    <ul class="nav justify-content-center" style="margin-top:15px">
+    <h1 style="color:white" class="threeD">Tiki yêu của Cương và Félix</h1>
+
+    <ul class="nav justify-content-center" style="margin-top:150px">
       <li class="nav-item">
         <a class="nav-link" style="color:white" href="/crawl-all-subcategories"
           >Crawl all subcategories</a
@@ -35,7 +37,8 @@
       <li>
         <button
           type="button"
-          class="btn btn-primary"
+          class="btn btn-light"
+          style="text-align:center; background-color:transparent; border:solid 1px white;margin-bottom:20px; color:white"
           data-toggle="modal"
           data-target="#exampleModal"
         >
@@ -46,7 +49,10 @@
 
     <div class="row">
       <div class="col-sm-2">
-        <div class="list-group" style="margin-top:50px">
+        <div
+          class="list-group"
+          style="margin-top:50px;margin-left:40px;margin-bottom:20px"
+        >
           {% for category in mainCategories %}
           <a href="{{ url_for('get_subcategories', categoryId=category[0]) }}">
             <button
@@ -70,24 +76,27 @@
           </a>
         </div>
       </div>
-      <div class="col-sm-10" style="margin-top:50px">
-        <ul class="nav nav-tabs">
+      <div class="col-sm-10" style="margin-top:50px;margin-right:0px">
+        {% if subcategories|length %}
+        <ul class="nav nav-tabs" style="margin-bottom:15px">
           {% for subcategory in subcategories %}
-          <li class="nav-item">
+          <li class="nav-item" style="margin-bottom:15px">
             <a
               class="nav-link"
+              style="color:white"
               href="{{ url_for('get_products', categoryId=subcategory[0]) }}"
               >{{subcategory[1]}}</a
             >
           </li>
           {% endfor%}
         </ul>
-        <div class="card-columns">
+        {% endif %}
+        <div class="card-columns" style="padding-right:40px;padding-left:10px">
           <!-- Loop through the data and display it -->
           {% for product in products %}
           <div
             class="card"
-            style="background-color: transparent; border: solid 0px transparent"
+            style="background-color: transparent; border: solid 0px transparent;width:50%;margin-left:60px"
           >
             <img
               src="{{ product[2] }}"
@@ -102,12 +111,13 @@
           </div>
           {% endfor%}
         </div>
-        <a href="/show-more-products">
+        <a href="/show-more-products" style="margin-left:70px">
           <button
             type="button"
-            class="list-group-item list-group-item-action btn-primary"
+            class="btn btn-light"
+            style="text-align:center; background-color:transparent; border:solid 1px white;margin-bottom:20px"
           >
-            <span style="color:#007bff"
+            <span style="color:white"
               >Show more... ({{ products|length
               }}/{{numberOfProductsOfCategory[0][0]}})</span
             >
@@ -126,9 +136,9 @@
       aria-hidden="true"
     >
       <div class="modal-dialog" role="document">
-        <div class="modal-content" style="height: 300px;">
+        <div class="modal-content modal-background" style="height: 300px;">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
+            <h5 class="modal-title" id="exampleModalLabel" style="color:white">
               Details
             </h5>
             <button
@@ -137,15 +147,22 @@
               data-dismiss="modal"
               aria-label="Close"
             >
-              <span aria-hidden="true">&times;</span>
+              <span aria-hidden="true" style="color:white">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
-            <div>number of products: {{numberOfProducts[0][0]}}</div>
-            <div>
-              number of main categories: {{numberOfMainCategories[0][0]}}
-            </div>
-            <div>number of subcategories: {{numberOfSubcategories[0][0]}}</div>
+          <div class="modal-body" style="color:white; text-align:center">
+            <h4>
+              Number of products<br />
+              {{numberOfProducts[0][0]}}
+            </h4>
+            <h4>
+              Number of main categories<br />
+              {{numberOfMainCategories[0][0]}}
+            </h4>
+            <h4>
+              Number of subcategories<br />
+              {{numberOfSubcategories[0][0]}}
+            </h4>
           </div>
         </div>
       </div>
@@ -177,7 +194,9 @@
     height: 300px;
   }
 
-  body {
+  body,
+  .modal-background {
+    font-family: sans-serif;
     height: 100%;
     background: linear-gradient(
         52deg,
@@ -252,5 +271,32 @@
         rgba(55, 55, 55, 0) 99%
       ),
       linear-gradient(0deg, #2625e3, #0bbaef);
+  }
+
+  .threeD {
+    color: white;
+    white-space: nowrap;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3em;
+    font-family: sans-serif;
+    letter-spacing: 0.1em;
+    transition: 0.3s;
+    text-shadow: 1px 1px 0 grey, 1px 2px 0 grey, 1px 3px 0 grey, 1px 4px 0 grey,
+      1px 5px 0 grey, 1px 6px 0 grey, 1px 7px 0 grey, 1px 8px 0 grey,
+      5px 13px 15px black;
+  }
+
+  .threeD:hover {
+    transition: 0.3s;
+    transform: scale(1.1) translate(-50%, -50%);
+    text-shadow: 1px -1px 0 grey, 1px -2px 0 grey, 1px -3px 0 grey,
+      1px -4px 0 grey, 1px -5px 0 grey, 1px -6px 0 grey, 1px -7px 0 grey,
+      1px -8px 0 grey, 5px -13px 15px black, 5px -13px 25px #808080;
+  }
+  ::-webkit-scrollbar {
+    display: none;
   }
 </style>
