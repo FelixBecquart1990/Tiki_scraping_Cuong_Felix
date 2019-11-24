@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Title</title>
+    <title>Tiki</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
@@ -18,6 +18,160 @@
     />
   </head>
   <body>
+    <h1 style="color:white" class="threeD">Tiki yêu của Cương và Félix</h1>
+
+    <ul class="nav justify-content-center" style="margin-top:150px">
+      <li class="nav-item">
+        <a class="nav-link" style="color:white" href="/crawl-all-subcategories"
+          >Crawl all subcategories</a
+        >
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          style="color:white"
+          href="/crawl-all-products-of-all-categories"
+          >Crawl all products of all categories</a
+        >
+      </li>
+      <li>
+        <button
+          type="button"
+          class="btn btn-light"
+          style="text-align:center; background-color:transparent; border:solid 1px white;margin-bottom:20px; color:white"
+          data-toggle="modal"
+          data-target="#exampleModal"
+        >
+          Details
+        </button>
+      </li>
+    </ul>
+
+    <div class="row">
+      <div class="col-sm-2">
+        <div
+          class="list-group"
+          style="margin-top:50px;margin-left:40px;margin-bottom:20px"
+        >
+          {% for category in mainCategories %}
+          <a href="{{ url_for('get_subcategories', categoryId=category[0]) }}">
+            <button
+              type="button"
+              class="list-group-item list-group-item-action text-truncate"
+            >
+              {{ category[1] }}
+            </button>
+          </a>
+          {% endfor%}
+          <a href="/show-more-main-categories">
+            <button
+              type="button"
+              class="list-group-item list-group-item-action btn-primary"
+            >
+              <span style="color:#007bff"
+                >Show more... ({{ mainCategories|length
+                }}/{{numberOfMainCategories[0][0]}})</span
+              >
+            </button>
+          </a>
+        </div>
+      </div>
+      <div class="col-sm-10" style="margin-top:50px;margin-right:0px">
+        {% if subcategories|length %}
+        <ul class="nav nav-tabs" style="margin-bottom:15px">
+          {% for subcategory in subcategories %}
+          <li class="nav-item" style="margin-bottom:15px">
+            <a
+              class="nav-link"
+              style="color:white"
+              href="{{ url_for('get_products', categoryId=subcategory[0]) }}"
+              >{{subcategory[1]}}</a
+            >
+          </li>
+          {% endfor%}
+        </ul>
+        {% endif %}
+        <div class="card-columns" style="padding-right:40px;padding-left:10px">
+          <!-- Loop through the data and display it -->
+          {% for product in products %}
+          <a href="{{ product[5] }}" target="_blank">
+            <div
+              class="card product"
+              style="background-color: transparent; border: solid 0px transparent;width:50%;margin-left:60px"
+            >
+              <img
+                src="{{ product[2] }}"
+                class="card-img-top"
+                alt="..."
+                style="border-radius:20px"
+              />
+              <div class="card-body">
+                <h5 class="card-title" style="color:white">{{ product[1] }}</h5>
+                <h4 style="color:white; text-decoration:underline">
+                  Price: {{product[6]}}
+                </h4>
+              </div>
+            </div>
+          </a>
+          {% endfor%}
+        </div>
+        <a href="/show-more-products" style="margin-left:70px">
+          <button
+            type="button"
+            class="btn btn-light"
+            style="text-align:center; background-color:transparent; border:solid 1px white;margin-bottom:20px"
+          >
+            <span style="color:white"
+              >Show more... ({{ products|length
+              }}/{{numberOfProductsOfCategory[0][0]}})</span
+            >
+          </button>
+        </a>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content modal-background" style="height: 300px;">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel" style="color:white">
+              Details
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true" style="color:white">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="color:white; text-align:center">
+            <h4>
+              Number of products<br />
+              {{numberOfProducts[0][0]}}
+            </h4>
+            <h4>
+              Number of main categories<br />
+              {{numberOfMainCategories[0][0]}}
+            </h4>
+            <h4>
+              Number of subcategories<br />
+              {{numberOfSubcategories[0][0]}}
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script
@@ -37,3 +191,120 @@
     ></script>
   </body>
 </html>
+
+<style>
+  #chart_div {
+    width: 100%;
+    height: 300px;
+  }
+
+  body,
+  .modal-background {
+    font-family: sans-serif;
+    height: 100%;
+    background: linear-gradient(
+        52deg,
+        rgba(163, 163, 163, 0.09) 0%,
+        rgba(163, 163, 163, 0.09) 33.3%,
+        rgba(100, 100, 100, 0.09) 33.3%,
+        rgba(100, 100, 100, 0.09) 66.6%,
+        rgba(162, 162, 162, 0.09) 66.6%,
+        rgba(162, 162, 162, 0.09) 99%
+      ),
+      linear-gradient(
+        258deg,
+        rgba(193, 193, 193, 0.06) 0%,
+        rgba(193, 193, 193, 0.06) 33.3%,
+        rgba(169, 169, 169, 0.06) 33.3%,
+        rgba(169, 169, 169, 0.06) 66.6%,
+        rgba(92, 92, 92, 0.06) 66.6%,
+        rgba(92, 92, 92, 0.06) 99%
+      ),
+      linear-gradient(
+        129deg,
+        rgba(45, 45, 45, 0.03) 0%,
+        rgba(45, 45, 45, 0.03) 33.3%,
+        rgba(223, 223, 223, 0.03) 33.3%,
+        rgba(223, 223, 223, 0.03) 66.6%,
+        rgba(173, 173, 173, 0.03) 66.6%,
+        rgba(173, 173, 173, 0.03) 99%
+      ),
+      linear-gradient(
+        280deg,
+        rgba(226, 226, 226, 0.06) 0%,
+        rgba(226, 226, 226, 0.06) 33.3%,
+        rgba(81, 81, 81, 0.06) 33.3%,
+        rgba(81, 81, 81, 0.06) 66.6%,
+        rgba(186, 186, 186, 0.06) 66.6%,
+        rgba(186, 186, 186, 0.06) 99%
+      ),
+      linear-gradient(
+        85deg,
+        rgba(225, 225, 225, 0.04) 0%,
+        rgba(225, 225, 225, 0.04) 33.3%,
+        rgba(95, 95, 95, 0.04) 33.3%,
+        rgba(95, 95, 95, 0.04) 66.6%,
+        rgba(39, 39, 39, 0.04) 66.6%,
+        rgba(39, 39, 39, 0.04) 99%
+      ),
+      linear-gradient(
+        128deg,
+        rgba(184, 184, 184, 0.06) 0%,
+        rgba(184, 184, 184, 0.06) 33.3%,
+        rgba(0, 0, 0, 0.06) 33.3%,
+        rgba(0, 0, 0, 0.06) 66.6%,
+        rgba(140, 140, 140, 0.06) 66.6%,
+        rgba(140, 140, 140, 0.06) 99.89999999999999%
+      ),
+      linear-gradient(
+        323deg,
+        rgba(40, 40, 40, 0.07) 0%,
+        rgba(40, 40, 40, 0.07) 33.3%,
+        rgba(214, 214, 214, 0.07) 33.3%,
+        rgba(214, 214, 214, 0.07) 66.6%,
+        rgba(190, 190, 190, 0.07) 66.6%,
+        rgba(190, 190, 190, 0.07) 99.89999999999999%
+      ),
+      linear-gradient(
+        61deg,
+        rgba(230, 230, 230, 0) 0%,
+        rgba(230, 230, 230, 0) 33.3%,
+        rgba(241, 241, 241, 0) 33.3%,
+        rgba(241, 241, 241, 0) 66.6%,
+        rgba(55, 55, 55, 0) 66.6%,
+        rgba(55, 55, 55, 0) 99%
+      ),
+      linear-gradient(0deg, #2625e3, #0bbaef);
+  }
+
+  .threeD {
+    color: white;
+    white-space: nowrap;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3em;
+    font-family: sans-serif;
+    letter-spacing: 0.1em;
+    transition: 0.3s;
+    text-shadow: 1px 1px 0 grey, 1px 2px 0 grey, 1px 3px 0 grey, 1px 4px 0 grey,
+      1px 5px 0 grey, 1px 6px 0 grey, 1px 7px 0 grey, 1px 8px 0 grey,
+      5px 13px 15px black;
+  }
+
+  .threeD:hover {
+    transition: 0.3s;
+    transform: scale(1.1) translate(-50%, -50%);
+    text-shadow: 1px -1px 0 grey, 1px -2px 0 grey, 1px -3px 0 grey,
+      1px -4px 0 grey, 1px -5px 0 grey, 1px -6px 0 grey, 1px -7px 0 grey,
+      1px -8px 0 grey, 5px -13px 15px black, 5px -13px 25px #808080;
+  }
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  .product:hover {
+    transition: all 0.3s;
+    transform: scale(0.95);
+  }
+</style>
