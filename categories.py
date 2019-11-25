@@ -137,6 +137,7 @@ def crawl_all_subcategories(main_categories):
                 print(f'{count} number of deepest nodes')
 
 
+# virables
 numberOfMainCategoriesShown = 25
 iDselectedCategory = 1
 
@@ -185,16 +186,3 @@ def get_number_of_subcategories():
         "SELECT COUNT(*) FROM categories WHERE parent_id IS NOT NULL")
     numberOfSubcategories = cursor.fetchall()
     return numberOfSubcategories
-
-# import the data from the JSON file
-# insert_query = "INSERT INTO student VALUES {}".format("(4, 'felix', 'hello@dataquest.io')")
-# cur.execute(insert_query)
-# conn.commit()
-
-  # categories = []
-  # import psycopg2
-  # conn = psycopg2.connect("dbname=tiki user=felix password=felixpostgre")
-  # cur = conn.cursor()
-  # cur.execute('SELECT * FROM categories')
-  # categories = cur.fetchall()
-  # conn.close()
