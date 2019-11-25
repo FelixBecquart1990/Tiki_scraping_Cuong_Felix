@@ -48,6 +48,7 @@ query = """
         ; """
 cur.execute(query)
 cat=cur.fetchall()
+```
 ---
 
 ### Example of scraping
