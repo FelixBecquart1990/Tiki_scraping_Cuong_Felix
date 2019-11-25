@@ -36,7 +36,18 @@ python app.py
 - Connect: We use psycopg2 LB to connect the python with PSQL. Change [User] and [Database] to yours to use this code
 - Data collected: product title, brand name, old price, discount, final price, category, ratings, TikiNOW availability, image Url
 - Take alook at [PhaCu_craw_code.ipynb] to see how to crawl all products from <tiki.vn>. We overcome the duplication of Product data by using the Categories Tree. In particular, we only get Product’s data from the deepest SubCategories, so the data is not duplicated.
+---
 
+### Query to find the deepest category
+
+```python
+query = """
+        SELECT cp.parent_id, cp.name, cp.url, id as child_id FROM cat_parents as cp
+         LEFT JOIN categories as c on cp.parent_id = c.parent_id
+         WHERE id is null
+        ; """
+cur.execute(query)
+cat=cur.fetchall()
 ---
 
 ### Example of scraping
